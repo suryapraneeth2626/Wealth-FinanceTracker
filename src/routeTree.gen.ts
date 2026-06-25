@@ -14,7 +14,6 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiInsightsRouteImport } from './routes/api/insights'
-import { Route as ApiGeminiRouteImport } from './routes/api/gemini'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AppTransactionsRouteImport } from './routes/_app.transactions'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
@@ -23,6 +22,7 @@ import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppBudgetsRouteImport } from './routes/_app.budgets'
 import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
 import { Route as AppAiRouteImport } from './routes/_app.ai'
+import { Route as ApiGeminiServerRouteImport } from './routes/api/gemini.server'
 
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
@@ -46,11 +46,6 @@ const IndexRoute = IndexRouteImport.update({
 const ApiInsightsRoute = ApiInsightsRouteImport.update({
   id: '/api/insights',
   path: '/api/insights',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiGeminiRoute = ApiGeminiRouteImport.update({
-  id: '/api/gemini',
-  path: '/api/gemini',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -93,6 +88,11 @@ const AppAiRoute = AppAiRouteImport.update({
   path: '/ai',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiGeminiServerRoute = ApiGeminiServerRouteImport.update({
+  id: '/api/gemini/server',
+  path: '/api/gemini/server',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -106,8 +106,8 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/transactions': typeof AppTransactionsRoute
   '/api/chat': typeof ApiChatRoute
-  '/api/gemini': typeof ApiGeminiRoute
   '/api/insights': typeof ApiInsightsRoute
+  '/api/gemini/server': typeof ApiGeminiServerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -121,8 +121,8 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/transactions': typeof AppTransactionsRoute
   '/api/chat': typeof ApiChatRoute
-  '/api/gemini': typeof ApiGeminiRoute
   '/api/insights': typeof ApiInsightsRoute
+  '/api/gemini/server': typeof ApiGeminiServerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -138,8 +138,8 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/_app/transactions': typeof AppTransactionsRoute
   '/api/chat': typeof ApiChatRoute
-  '/api/gemini': typeof ApiGeminiRoute
   '/api/insights': typeof ApiInsightsRoute
+  '/api/gemini/server': typeof ApiGeminiServerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -155,8 +155,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/transactions'
     | '/api/chat'
-    | '/api/gemini'
     | '/api/insights'
+    | '/api/gemini/server'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -170,8 +170,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/transactions'
     | '/api/chat'
-    | '/api/gemini'
     | '/api/insights'
+    | '/api/gemini/server'
   id:
     | '__root__'
     | '/'
@@ -186,8 +186,8 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/transactions'
     | '/api/chat'
-    | '/api/gemini'
     | '/api/insights'
+    | '/api/gemini/server'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,8 +196,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
   ApiChatRoute: typeof ApiChatRoute
-  ApiGeminiRoute: typeof ApiGeminiRoute
   ApiInsightsRoute: typeof ApiInsightsRoute
+  ApiGeminiServerRoute: typeof ApiGeminiServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -235,13 +235,6 @@ declare module '@tanstack/react-router' {
       path: '/api/insights'
       fullPath: '/api/insights'
       preLoaderRoute: typeof ApiInsightsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/gemini': {
-      id: '/api/gemini'
-      path: '/api/gemini'
-      fullPath: '/api/gemini'
-      preLoaderRoute: typeof ApiGeminiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
@@ -300,6 +293,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAiRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/gemini/server': {
+      id: '/api/gemini/server'
+      path: '/api/gemini/server'
+      fullPath: '/api/gemini/server'
+      preLoaderRoute: typeof ApiGeminiServerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -331,8 +331,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
   ApiChatRoute: ApiChatRoute,
-  ApiGeminiRoute: ApiGeminiRoute,
   ApiInsightsRoute: ApiInsightsRoute,
+  ApiGeminiServerRoute: ApiGeminiServerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
